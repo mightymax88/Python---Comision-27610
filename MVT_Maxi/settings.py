@@ -55,7 +55,7 @@ ROOT_URLCONF = 'MVT_Maxi.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['/Volumes/GoogleDrive-109720198790235587340/Mi unidad/Cursos/CODERHOUSE/Python/Proyecto 01/MVT_Maxi/MVT_Maxi/templates'],
+        'DIRS': ['/Volumes/GoogleDrive-109720198790235587340/Mi unidad/Cursos/CODERHOUSE/Python/Proyecto 01/MVT_Maxi/MVT_Maxi/templates','/Volumes/GoogleDrive-109720198790235587340/Mi unidad/Cursos/CODERHOUSE/Python/Proyecto 01/MVT_Maxi/AppMVT/templates/AppCoder'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
