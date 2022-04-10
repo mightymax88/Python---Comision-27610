@@ -5,16 +5,20 @@
 {% block contenidoQueCambia %}
     <!-- Esto es lo que se va a cambiar -->
     <body>
-        {% if miFormulario.errors %}
-        <p style="color: red;">Están mal los datos, revisar!</p>
-        {% endif %}
+        <div class="container col-10">
+            <h1>Cargar Curso</h1>
+            <p>Ingresar los datos:</p>
+            {% if miFormulario.errors %}
+            <p style="color: red;">Están mal los datos, revisar!</p>
+            {% endif %}
 
-        <form action = "" method="POST">{% csrf_token %}
-            <table>
-                {{ miFormulario.as_table }}
-            </table>>
-            <input type="submit" value="Enviar">
-        </form>
+            <form action = "" method="POST">{% csrf_token %}
+                <table>
+                    {{ miFormulario.as_table }}
+                </table>>
+                <input type="submit" value="Enviar">
+            </form>
+        </div>
     </body>
 
 {% endblock %}

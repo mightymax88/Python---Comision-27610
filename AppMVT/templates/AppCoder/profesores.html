@@ -4,7 +4,18 @@
 
 {% block contenidoQueCambia %}
     <!-- Esto es lo que se va a cambiar -->
-    <h1>Seccion Profesores</h1>
-    <p>Ojalá funcione</p>
+    <div class="container col-10">
+        <h1>Seccion Profesores</h1>
+        <p>Ingresados a la fecha:</p>
+
+        <p>
+            {% for x in db %}
+                {{x}}
+                <br>
+            {% endfor %}
+        </p>
+
+    </div>
+    
 
 {% endblock %}
