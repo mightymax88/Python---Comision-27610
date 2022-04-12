@@ -9,7 +9,7 @@ from AppMVT.forms import CursoFormulario, ProfesorFormulario, EstudianteFormular
 
 # Create your views here.
 def probandoTemplate(self):
-    con = sqlite3.connect("/Volumes/GoogleDrive-109720198790235587340/Mi unidad/Cursos/CODERHOUSE/Python/Proyecto 01/MVT_Maxi/db.sqlite3")
+    con = sqlite3.connect("db.sqlite3")
     cur = con.cursor()
     cur.execute("SELECT * FROM AppMVT_familiar")
     result = cur.fetchall()
@@ -24,7 +24,7 @@ def inicio(request):
     return render(request, "AppCoder/inicio.html")
 
 def cursos(request):
-    con = sqlite3.connect("/Volumes/GoogleDrive-109720198790235587340/Mi unidad/Cursos/CODERHOUSE/Python/Proyecto 01/MVT_Maxi/db.sqlite3")
+    con = sqlite3.connect("db.sqlite3")
     cur = con.cursor()
     cur.execute("SELECT * FROM AppMVT_curso")
     result = cur.fetchall()
@@ -36,7 +36,7 @@ def cursos(request):
     return HttpResponse(documento)
 
 def profesores(request):
-    con = sqlite3.connect("/Volumes/GoogleDrive-109720198790235587340/Mi unidad/Cursos/CODERHOUSE/Python/Proyecto 01/MVT_Maxi/db.sqlite3")
+    con = sqlite3.connect("db.sqlite3")
     cur = con.cursor()
     cur.execute("SELECT * FROM AppMVT_profesor")
     result = cur.fetchall()
@@ -48,7 +48,7 @@ def profesores(request):
     return HttpResponse(documento)
 
 def estudiantes(request):
-    con = sqlite3.connect("/Volumes/GoogleDrive-109720198790235587340/Mi unidad/Cursos/CODERHOUSE/Python/Proyecto 01/MVT_Maxi/db.sqlite3")
+    con = sqlite3.connect("db.sqlite3")
     cur = con.cursor()
     cur.execute("SELECT * FROM AppMVT_estudiante")
     result = cur.fetchall()
@@ -60,7 +60,7 @@ def estudiantes(request):
     return HttpResponse(documento)
 
 def entregables(request):
-    con = sqlite3.connect("/Volumes/GoogleDrive-109720198790235587340/Mi unidad/Cursos/CODERHOUSE/Python/Proyecto 01/MVT_Maxi/db.sqlite3")
+    con = sqlite3.connect("db.sqlite3")
     cur = con.cursor()
     cur.execute("SELECT * FROM AppMVT_entregable")
     result = cur.fetchall()
