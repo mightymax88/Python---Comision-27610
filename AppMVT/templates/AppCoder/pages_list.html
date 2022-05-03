@@ -1,0 +1,23 @@
+{% extends "padre.html" %}
+
+{% load static %}
+
+{% block contenidoQueCambia %}
+    <!-- Esto es lo que se va a cambiar -->
+    <div class="container col-10">
+        <h1>Lista de Blogs</h1>
+        <ul>
+            {% for blog in object_list %}
+            <li>
+                <p>NOMBRE: {{blog.titulo}} / Autor: {{blog.autor}}</p>
+                <p>
+                    <a href="{% url 'Detail' blog.id %}">Leer más</a> |
+                    <a href="{% url 'Edit' blog.id %}">Editar</a> |
+                    <a href="{% url 'Delete' blog.id %}">Borrar</a>
+                </p>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+{% endblock %}

@@ -1,139 +1,105 @@
 from django.shortcuts import render
-import datetime
-from django.template import Context, Template
-from django.template import loader
-from django.http import HttpResponse
 import sqlite3
-from AppMVT.models import Curso, Entregable, Estudiante, Profesor
-from AppMVT.forms import CursoFormulario, ProfesorFormulario, EstudianteFormulario, EntregableFormulario
+from AppMVT.models import Blog, Message, Avatar
+from AppMVT.forms import UserRegisterForm, UserEditForm
+from django.views.generic import ListView
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
-def probandoTemplate(self):
-    con = sqlite3.connect("db.sqlite3")
-    cur = con.cursor()
-    cur.execute("SELECT * FROM AppMVT_familiar")
-    result = cur.fetchall()
-    dia = datetime.datetime.now()
-    diccionario = {"db":result, "fecha":dia}
-    plantilla = loader.get_template("template1.html")
-    documento = plantilla.render(diccionario)
-    con.close()
-    return HttpResponse(documento)
-
+@login_required
 def inicio(request):
-    return render(request, "AppCoder/inicio.html")
+    avatares = Avatar.objects.filter(user=request.user.id)
+    return render(request, "AppCoder/inicio.html", {"url":avatares[0].imagen.url})
 
-def cursos(request):
-    con = sqlite3.connect("db.sqlite3")
-    cur = con.cursor()
-    cur.execute("SELECT * FROM AppMVT_curso")
-    result = cur.fetchall()
-    dia = datetime.datetime.now()
-    diccionario = {"db":result, "fecha":dia}
-    plantilla = loader.get_template("AppCoder/cursos.html")
-    documento = plantilla.render(diccionario)
-    con.close()
-    return HttpResponse(documento)
+def about(request):
+    return render(request, "AppCoder/about.html")
 
-def profesores(request):
-    con = sqlite3.connect("db.sqlite3")
-    cur = con.cursor()
-    cur.execute("SELECT * FROM AppMVT_profesor")
-    result = cur.fetchall()
-    dia = datetime.datetime.now()
-    diccionario = {"db":result, "fecha":dia}
-    plantilla = loader.get_template("AppCoder/profesores.html")
-    documento = plantilla.render(diccionario)
-    con.close()
-    return HttpResponse(documento)
+def enDesarrollo(request):
+    return render(request, "AppCoder/enDesarrollo.html")
 
-def estudiantes(request):
-    con = sqlite3.connect("db.sqlite3")
-    cur = con.cursor()
-    cur.execute("SELECT * FROM AppMVT_estudiante")
-    result = cur.fetchall()
-    dia = datetime.datetime.now()
-    diccionario = {"db":result, "fecha":dia}
-    plantilla = loader.get_template("AppCoder/estudiantes.html")
-    documento = plantilla.render(diccionario)
-    con.close()
-    return HttpResponse(documento)
+#CLASES BASADAS EN VISTAS
+class PagesList(ListView):
+    model = Blog
+    template_name = "AppCoder/pages_list.html"
 
-def entregables(request):
-    con = sqlite3.connect("db.sqlite3")
-    cur = con.cursor()
-    cur.execute("SELECT * FROM AppMVT_entregable")
-    result = cur.fetchall()
-    dia = datetime.datetime.now()
-    diccionario = {"db":result, "fecha":dia}
-    plantilla = loader.get_template("AppCoder/entregables.html")
-    documento = plantilla.render(diccionario)
-    con.close()
-    return HttpResponse(documento)
+class PagesDetalle(DetailView):
+    model = Blog
+    template_name = "AppCoder/pages_detalle.html"
 
-def cursoFormulario(request):
+class PagesCreacion(CreateView):
+    model = Blog
+    success_url = "/AppMVT/pages/list"
+    fields = ['titulo', 'subtitulo', 'cuerpo', 'autor', 'fecha', 'imagen']
+
+class PagesUpdate(UpdateView):
+    model = Blog
+    success_url = "/AppMVT/pages/list"
+    fields = ['titulo', 'subtitulo', 'cuerpo', 'autor', 'fecha', 'imagen']
+
+class PagesDelete(DeleteView):
+    model = Blog
+    success_url = "/AppMVT/pages/list"
+
+#CLASES BASADAS EN VISTAS
+class MessageList(ListView):
+    model = Message
+    template_name = "AppCoder/messages_list.html"
+
+class MessageCreacion(CreateView):
+    model = Message
+    success_url = "messages/list"
+    fields = ['mensaje', 'autor', 'fecha']
+
+#LOGIN
+def login_request(request):
+    if request.method == "POST":
+        form = AuthenticationForm(request, data = request.POST)
+        if form.is_valid():
+            usuario = form.cleaned_data.get('username')
+            contra = form.cleaned_data.get('password')
+            user = authenticate(username = usuario, password = contra)
+            if user is not None:
+                login(request, user)
+                return render(request, "AppCoder/inicio.html", {"mensaje":f"Bienvenido {usuario}"})
+            else:
+                return render(request, "AppCoder/inicio.html", {"mensaje":"Error, datos incorrectos"})
+        else:
+            return render(request, "AppCoder/inicio.html", {"mensaje":"Error, formulario erroneo"})
+    form = AuthenticationForm()
+    return render(request, "AppCoder/login.html", {'form':form})
+
+def register(request):
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            form.save()
+            return render(request, "AppCoder/inicio.html", {"mensaje":"Usuario Creado"})
+    else:
+        #form = UserCreationForm()
+        form = UserRegisterForm()
+    return render(request, "AppCoder/registro.html", {"form":form})
+
+@login_required
+def editarPerfil(request):
+    usuario = request.user
     if request.method == 'POST':
-        miFormulario = CursoFormulario(request.POST)
+        miFormulario = UserEditForm(request.POST)
         print(miFormulario)
         if miFormulario.is_valid:
             informacion = miFormulario.cleaned_data
-            curso= Curso(nombre = informacion['curso'], camada = informacion['camada'])
-            curso.save()
-            return render(request, "inicio.html")
+            usuario.email = informacion['email']
+            usuario.password1 = informacion['password1']
+            usuario.password2 = informacion['password2']
+            usuario.last_name = informacion['last_name']
+            usuario.first_name = informacion['first_name']
+            usuario.save()
+            return render(request, "AppCoder/inicio.html")
     else:
-        miFormulario = CursoFormulario()
-    return render(request, "AppCoder/cursoFormulario.html", {"miFormulario":miFormulario})
-
-def profesorFormulario(request):
-    if request.method == 'POST':
-        miFormulario = ProfesorFormulario(request.POST)
-        print(miFormulario)
-        if miFormulario.is_valid:
-            informacion = miFormulario.cleaned_data
-            profesor= Profesor(nombre = informacion['nombre'], apellido = informacion['apellido'],
-                email = informacion['email'], profesion = informacion['profesion'])
-            profesor.save()
-            return render(request, "inicio.html")
-    else:
-        miFormulario = ProfesorFormulario()
-    return render(request, "AppCoder/profesorFormulario.html", {"miFormulario":miFormulario})
-
-def estudianteFormulario(request):
-    if request.method == 'POST':
-        miFormulario = EstudianteFormulario(request.POST)
-        print(miFormulario)
-        if miFormulario.is_valid:
-            informacion = miFormulario.cleaned_data
-            estudiante= Estudiante(nombre = informacion['nombre'], apellido = informacion['apellido'],
-                email = informacion['email'])
-            estudiante.save()
-            return render(request, "inicio.html")
-    else:
-        miFormulario = EstudianteFormulario()
-    return render(request, "AppCoder/estudianteFormulario.html", {"miFormulario":miFormulario})
-
-def entregableFormulario(request):
-    if request.method == 'POST':
-        miFormulario = EntregableFormulario(request.POST)
-        print(miFormulario)
-        if miFormulario.is_valid:
-            informacion = miFormulario.cleaned_data
-            entregable= Entregable(nombre = informacion['nombre'], fechaDeEntrega = informacion['fechaDeEntrega'],
-                entregado = informacion['entregado'])
-            entregable.save()
-            return render(request, "inicio.html")
-    else:
-        miFormulario = EntregableFormulario()
-    return render(request, "AppCoder/entregableFormulario.html", {"miFormulario":miFormulario})
-
-def busquedaCamada(request):
-    return render(request, "AppCoder/busquedaCamada.html")
-
-def buscar(request):
-    if request.GET["camada"]:
-        camada = request.GET["camada"]
-        cursos = Curso.objects.filter(camada=camada)
-        return render(request, "resultadosBusqueda.html", {"cursos":cursos, "camada":camada})
-    else:
-        respuesta = "No enviaste datos"
-    return HttpResponse(respuesta)
+        miFormulario = UserEditForm(initial={'email':usuario.email})
+    return render(request, "AppCoder/editarPerfil.html", {"miFormulario":miFormulario, "usuario": usuario})

@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+        <meta name="generator" content="Hugo 0.88.1">
+        <title>Blog · CoderHouse</title>
+
+        <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/blog/">
+
+        
+
+        <!-- Bootstrap core CSS -->
+        <link href="/static/AppCoder/dist/css/bootstrap.min.css" rel="stylesheet">
+
+        <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+            font-size: 3.5rem;
+            }
+        }
+        </style>
+
+        
+        <!-- Custom styles for this template -->
+        <link href="https://fonts.googleapis.com/css?family=Playfair&#43;Display:700,900&amp;display=swap" rel="stylesheet">
+        <!-- Custom styles for this template -->
+        <link href="/static/AppCoder/css/blog.css" rel="stylesheet">
+    </head>
+<body>
+    
+<div class="container">
+    <header class="blog-header py-3">
+        <div class="row flex-nowrap justify-content-between align-items-center">
+            <div class="col-3 pt-1 justify-content-around align-items-center">
+                <a class="btn btn-sm btn-outline-primary" href="{% url 'Register' %}">Signup</a>
+            </div>
+        <div class="col-6 text-center">
+            <a class="blog-header-logo text-dark" href="{% url 'Inicio' %}">Blog (Django - CoderHouse)</a>
+        </div>
+        <div class="col-3 d-flex justify-content-end align-items-center">
+            <a class="btn btn-sm btn-outline-secondary" href="/admin">Administrar</a>
+        </div>
+        </div>
+    </header>
+</div>
+
+<!-- Esto es lo que se va a cambiar -->
+<div class="container col-10">
+    <h1>Login</h1>
+
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button type="submit">Iniciar sesión</button>
+    </form>
+    <br>
+</div>
+
+<footer class="blog-footer">
+    <p>Blog template built for <a href="https://getbootstrap.com/">Bootstrap</a> by <a href="https://twitter.com/mdo">@mdo</a>.</p>
+    <p>
+        <a href="{% url 'Inicio' %}">Volver al Inicio</a>
+    </p>
+</footer>
+
+</body>
+</html>

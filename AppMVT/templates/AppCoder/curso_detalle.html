@@ -1,0 +1,17 @@
+{% extends "padre.html" %}
+
+{% load static %}
+
+{% block contenidoQueCambia %}
+    <!-- Esto es lo que se va a cambiar -->
+    <div class="container col-10">
+        <h3>Información</h3>
+        <p>Nombre del Curso: <i>{{curso.nombre}}</i></p>
+        <p>Camada: <i>{{curso.camada}}</i></p>
+        <p>
+            <a href="{% url 'List' %}">Regresar</a>
+        </p>
+    </div>
+    
+
+{% endblock %}

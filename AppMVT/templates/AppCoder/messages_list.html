@@ -1,0 +1,23 @@
+{% extends "padre.html" %}
+
+{% load static %}
+
+{% block contenidoQueCambia %}
+    <!-- Esto es lo que se va a cambiar -->
+    <div class="container col-10">
+        <h1>Mensajes:</h1>
+        <p>
+            <a href="{% url 'MessageNew'%}">Escribir mensaje</a>
+        </p>
+        <ul>
+            {% for x in object_list %}
+            <li>
+                <h4>{{x.mensaje}}</h4>
+                <h5>{{x.fecha}}</h5>
+                <p>De: {{x.autor}}</p>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+{% endblock %}

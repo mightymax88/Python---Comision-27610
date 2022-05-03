@@ -1,0 +1,20 @@
+{% extends "padre.html" %}
+
+{% load static %}
+
+{% block contenidoQueCambia %}
+    <!-- Esto es lo que se va a cambiar -->
+    <div class="container col-10">
+        <h2>Información</h2>
+        <h3>Nombre del Blog: <i>{{blog.titulo}}</i></h3>
+        <h4>Localidad: <i>{{blog.subtitulo}}</i></h4>
+        <h5>Autor: <i>{{blog.autor}}</i> / Fecha: <i>{{blog.fecha}}</i></h5>
+        <p>{{blog.cuerpo}}</p>
+        <img height = "300px" src = "/media/{{blog.imagen}}" />
+        <p>
+            <a href="{% url 'PagesList' %}">Regresar</a>
+        </p>
+    </div>
+    
+
+{% endblock %}

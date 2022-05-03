@@ -1,0 +1,17 @@
+{% extends "padre.html" %}
+
+{% load static %}
+
+{% block contenidoQueCambia %}
+    <!-- Esto es lo que se va a cambiar -->
+    <div class="container col-10">
+        <form method="post"> {% csrf_token %}
+            <p>¿Confirma que desea borrar el blog "{{object}}"</p>
+            <input type="submit" value="Submit" />
+        </form>
+        <br>
+        <a href="{% url 'PagesList' %}">No, regresar</a>
+    </div>
+    
+
+{% endblock %}

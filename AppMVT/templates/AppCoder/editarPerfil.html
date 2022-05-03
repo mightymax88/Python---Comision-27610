@@ -1,0 +1,21 @@
+{% extends "padre.html" %}
+
+{% load static %}
+
+{% block contenidoQueCambia %}
+    <!-- Esto es lo que se va a cambiar -->
+    <body>
+        <div class="container col-10">
+            <h1>Formulario - Editar Perfil</h1>
+            <h3>De {{usuario}}:</h3>
+
+            <form action = "" method="POST">{% csrf_token %}
+                <table>
+                    {{ miFormulario.as_table }}
+                </table>>
+                <input type="submit" value="Enviar">
+            </form>
+        </div>
+    </body>
+
+{% endblock %}

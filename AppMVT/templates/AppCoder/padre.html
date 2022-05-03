@@ -6,7 +6,7 @@
         <meta name="description" content="">
         <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
         <meta name="generator" content="Hugo 0.88.1">
-        <title>Blog Template · Bootstrap v5.1</title>
+        <title>Blog · CoderHouse</title>
 
         <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/blog/">
 
@@ -43,31 +43,33 @@
     <header class="blog-header py-3">
         <div class="row flex-nowrap justify-content-between align-items-center">
         <div class="col-3 pt-1">
-            <a class="link-secondary" href="#">Suscribirse</a>
+            {% if not request.user.is_authenticated %}
+            <a class="link-secondary" href="{% url 'Login' %}">Login</a>
+            {% endif %}
+            {% if request.user.is_authenticated %}
+            <p class = "text-muted mb-4 mb-lg-0">Hola, {{user.username}}</p>
+            <a class="link-secondary" href="{% url 'Logout' %}">(Logout)</a>
+            {% endif %}
         </div>
         <div class="col-6 text-center">
-            <a class="blog-header-logo text-dark" href="{% url 'Inicio' %}">Blog (Django - CoderHouse)</a>
+            <a class="blog-header-logo text-dark" href="{% url 'Inicio' %}">Blog Turismo</a>
         </div>
-        <div class="col-3 d-flex justify-content-end align-items-center">
-            <a class="link-secondary" href="#" aria-label="Search">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="mx-3" role="img" viewBox="0 0 24 24"><title>Search</title><circle cx="10.5" cy="10.5" r="7.5"/><path d="M21 21l-5.2-5.2"/></svg>
-            </a>
-            <a class="btn btn-sm btn-outline-secondary" href="/admin">Administrar</a>
+        <div class="col-3 d-flex justify-content-around align-items-center">
+            <a class="btn btn-sm btn-outline-secondary" href="{% url 'Register' %}">Signup</a>
+            <a class="btn btn-sm btn-outline-primary" href="/admin">Administrar</a>
         </div>
+        
         </div>
     </header>
 
     <div class="nav-scroller py-1 mb-2">
         <nav class="nav d-flex justify-content-between">
-            <a class="p-2 link-secondary" href="{% url 'Cursos' %}">Cursos</a>
-            <a class="p-2 link-secondary" href="{% url 'Estudiantes' %}">Estudiante</a>
-            <a class="p-2 link-secondary" href="{% url 'Profesores' %}">Profesores</a>
-            <a class="p-2 link-secondary" href="{% url 'Entregables' %}">Entregable</a>
-            <a class="p-2 link-secondary" href="{% url 'CursoFormulario' %}">Curso-Form</a>
-            <a class="p-2 link-secondary" href="{% url 'EstudianteFormulario' %}">Estudiante-Form</a>
-            <a class="p-2 link-secondary" href="{% url 'ProfesorFormulario' %}">Profesor-Form</a>
-            <a class="p-2 link-secondary" href="{% url 'EntregableFormulario' %}">Entregable-Form</a>
-            <a class="p-2 link-secondary" href="{% url 'BusquedaCamada' %}">Busqueda-Camada</a>
+            <a class="p-2 link-secondary" href="{% url 'Inicio' %}">Home</a>
+            <a class="p-2 link-secondary" href="{% url 'About' %}">About</a>
+            <a class="p-2 link-secondary" href="{% url 'PagesList' %}">Pages</a>
+            <a class="p-2 link-secondary" href="{% url 'New' %}">Create Page</a>
+            <a class="p-2 link-secondary" href="{% url 'EditarPerfil' %}">Profile</a>
+            <a class="p-2 link-secondary" href="{% url 'MessageList' %}">Messages</a>
         </nav>
     </div>
 </div>
@@ -75,9 +77,8 @@
 <main class="container">
     <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
         <div class="col-md-6 px-0">
-            <h1 class="display-4 fst-italic">Proyecto Final</h1>
-            <p class="lead my-3">Los 4 primeros enlaces muestran la información guardada en cada sección, los restantes responden a Formularios de ingreso y el último a Búsqueda.</p>
-            <p class="lead mb-0"><a href="{% url 'Inicio' %}" class="text-white fw-bold">En desarrollo...</a></p>
+            <h1 class="display-4 fst-italic">Turismo nacional</h1>
+            <p class="lead my-3">Blogs de lugares para visitar en Argentina.</p>
         </div>
     </div>
 </main>
