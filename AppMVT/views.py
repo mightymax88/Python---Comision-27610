@@ -13,11 +13,13 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 @login_required
 def inicio(request):
-    avatares = Avatar.objects.filter(user=request.user.id)
-    return render(request, "AppCoder/inicio.html", {"url":avatares[0].imagen.url})
+    #avatares = Avatar.objects.filter(user=request.user.id)
+    #return render(request, "AppCoder/inicio.html", {"url":avatares[0].imagen.url})
+    return render(request, "AppCoder/inicio.html")
 
 def about(request):
     return render(request, "AppCoder/about.html")
+
 
 def enDesarrollo(request):
     return render(request, "AppCoder/enDesarrollo.html")
@@ -55,36 +57,6 @@ class MessageCreacion(CreateView):
     success_url = "messages/list"
     fields = ['mensaje', 'autor', 'fecha']
 
-#LOGIN
-def login_request(request):
-    if request.method == "POST":
-        form = AuthenticationForm(request, data = request.POST)
-        if form.is_valid():
-            usuario = form.cleaned_data.get('username')
-            contra = form.cleaned_data.get('password')
-            user = authenticate(username = usuario, password = contra)
-            if user is not None:
-                login(request, user)
-                return render(request, "AppCoder/inicio.html", {"mensaje":f"Bienvenido {usuario}"})
-            else:
-                return render(request, "AppCoder/inicio.html", {"mensaje":"Error, datos incorrectos"})
-        else:
-            return render(request, "AppCoder/inicio.html", {"mensaje":"Error, formulario erroneo"})
-    form = AuthenticationForm()
-    return render(request, "AppCoder/login.html", {'form':form})
-
-def register(request):
-    if request.method == "POST":
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data['username']
-            form.save()
-            return render(request, "AppCoder/inicio.html", {"mensaje":"Usuario Creado"})
-    else:
-        #form = UserCreationForm()
-        form = UserRegisterForm()
-    return render(request, "AppCoder/registro.html", {"form":form})
-
 @login_required
 def editarPerfil(request):
     usuario = request.user
@@ -103,3 +75,32 @@ def editarPerfil(request):
     else:
         miFormulario = UserEditForm(initial={'email':usuario.email})
     return render(request, "AppCoder/editarPerfil.html", {"miFormulario":miFormulario, "usuario": usuario})
+
+    #LOGIN
+def login_request(request):
+    if request.method == "POST":
+        form = AuthenticationForm(request, data = request.POST)
+        if form.is_valid():
+            usuario = form.cleaned_data.get('username')
+            contra = form.cleaned_data.get('password')
+            user = authenticate(username = usuario, password = contra)
+            if user is not None:
+                login(request, user)
+                return render(request, "AppCoder/inicio.html", {"mensaje":f"Bienvenido {usuario}!"})
+            else:
+                return render(request, "AppCoder/inicio.html", {"mensaje":"Error, datos incorrectos"})
+        else:
+            return render(request, "AppCoder/inicio.html", {"mensaje":"Error, datos incorrectos. Repetir Login."})
+    form = AuthenticationForm()
+    return render(request, "AppCoder/login.html", {'form':form})
+
+def register(request):
+    if request.method == "POST":
+        form = UserRegisterForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            form.save()
+            return render(request, "AppCoder/inicio.html", {"mensaje":"Usuario Creado - Por favor loguearse nuevamente!"})
+    else:
+        form = UserRegisterForm()
+    return render(request, "AppCoder/register.html", {"form":form})
